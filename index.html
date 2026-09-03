@@ -96,7 +96,6 @@
             height: 2ch;
             transform: translateY(-3ch);
             z-index: -1;
-            mix-blend-mode: difference;
         }
         .arrow {
             background: url(arrow.png);
@@ -188,7 +187,7 @@
     </style>
 </head>
 <body>
-    <p>click to proceed...</p>
+    <p style="position: absolute; bottom: 10px;">click to proceed...</p>
     <div class="overlay"></div>
     <div class="card" onclick="handleCardClick(this);">
         <div class="cover">
