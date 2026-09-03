@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cabin Sketch', sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            overflow: hidden;
+            transition: all 1s ease-in-out;
+            cursor: grab;
+        }
+        .backgchange {
+            background: #24242422;
+        }
+        #fireworkCanvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -10;
+            /* background: ; */
+        }
+        .card {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            background-color: #edeae1;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4),
+                        inset 300px 0 50px rgba(0, 0, 0, 0.4);
+            transform: perspective(2000px) rotateZ(10deg);
+            transform-style: preserve-3d;
+            transition: all 1s ease-in-out;
+        }
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0 10px 10px 0;
+            background: url('https://e0.pxfuel.com/wallpapers/704/231/desktop-wallpaper-premium-vector-of-abstract-blue-tone-memphis-patterned-mobile-phone-vector-by-aum-about-dark-instagram-story-background-aesthetic-background-abstract-design-cute-background-graphic-aesthetic-abstract.jpg') no-repeat center center / cover;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: all 1s ease-in-out;
+        }
+        .cover svg {
+            backface-visibility: hidden;
+        }
+        .clicked {
+            transform: perspective(2000px) rotateZ(0deg);
+            scale: 1.3;
+            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4),
+                        inset 20px 0 50px rgba(0, 0, 0, 0.4);
+        }
+        .clicked .cover {
+            transform: rotateY(-135deg);
+            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4);
+        }
+        .content {
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: left;
+            font-size: 11px;
+        }
+        .text {
+            font-size: 1.2rem; /* or larger */
+            line-height: 1.6;
+            text-align: left;
+            white-space: pre-wrap; /* preserve line breaks */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            height: 2ch;
+            transform: translateY(-3ch);
+            z-index: -1;
+            mix-blend-mode: difference;
+        }
+        .arrow {
+            background: url(arrow.png);
+            background-size: cover;
+            width: 50px;
+            height: 35px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 20px;
+            z-index: -1;
+        }
+        .hide {
+            display: none;
+        }
+        .cake {
+            opacity: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 50%;
+            transform: translateY(calc(50% + 90px)) scale(1.5);
+            z-index: -1;
+        }
+        .cake svg {
+            width: 100%;
+        }
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .overlay{
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            /* animation: glow 2s infinite; */
+        }
+        @keyframes glow {
+            0% {box-shadow: inset 0 0 0px white;}
+            50% {box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.562);}
+            100% {box-shadow:inset 0 0 0px white;}
+        }
+@media screen and (max-width: 600px) {
+  .card {
+    /* transform: none; remove complex transforms on small screens */
+    scale: 1;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+    border-radius: 10px;
+  }
+
+  .clicked {
+    scale: 1.1;
+  }
+
+  .content {
+    padding: 1rem;
+    font-size: 0.9rem;
+    height: auto;
+  }
+
+  .text {
+    font-size: 1.5rem;
+    transform: none;
+    padding: 1rem;
+  }
+
+  .arrow {
+    width: 40px;
+    height: 30px;
+  }
+}
+
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="card" onclick="handleCardClick(this);">
+        <div class="cover">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="eE3JGwnlouS1" viewBox="0 0 300 400" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" project-id="de1c924aa439489bb30be9295aa8c84c" export-id="d6488e55a0ab4c09a2131d68e3984aff" cached="false"><g transform="matrix(.138274 0 0 0.138274 79.012541 129.164372)"><path d="M659.001,1021.27h-294.571c-39.3671,0-71.5662-32.1991-71.5662-71.5662v-512c0-39.3671,32.1991-71.5662,71.5662-71.5662h294.571c39.3671,0,71.5662,32.1991,71.5662,71.5662v511.886c0,39.3671-32.1991,71.68-71.5662,71.68v.0002Z" transform="matrix(.46104 0 0 1 275.794186 0)" fill="#f7c194"/><path d="M623.389,137.216C557.1703,268.971,558.7632,19.797,513.024,3.299c-4.096,21.2765-10.6951,42.2115-19.456,62.0089-17.1805,38.7982-46.08,55.9787-71.1111,87.8365-39.8222,50.7449-35.9538,132.779,12.6293,176.014c58.4818,51.9965,152.349,31.5165,185.117-39.1395c21.0489-45.3973,6.71289-104.903,3.18578-152.803Z" fill="#f97439"/><path d="M675.186518,163.831455C583.920935,288.496298,547.475738,18.751736,524.30576,8.642528c-4.096,21.2765-10.6951,42.2115-19.456,62.0089-17.1805,38.7982-46.08,55.9787-71.1111,87.8365-39.8222,50.7449-35.9538,132.779,12.6293,176.014c58.4818,51.9965,176.806114,36.698539,209.574114-33.957461c19.24444-47.110536,22.77155-73.370605,19.24444-121.270605Z" transform="matrix(.591577 0 0 0.696607 200.815325 71.949198)" fill="#fc883e"/><path d="M513.381993,153.1444C493.812193,196.7213,425.6421,287.175,502.66967,310.045c16.9529,5.00622,36.939107.534574,47.975507-14.711676c28.3307-39.0258,21.7032-46.827408,21.7032-73.526203-.796445.682666-21.7032,32.919845-29.196522,9.545448-4.186705-9.545448-24.194772-66.147669-29.769882-78.208169Z" fill="#f9ba67"/><path d="M505.742,210.603c-13.9947,25.0311-43.4631,89.3155,2.84445,100.807c26.9653,6.59911,42.5529-15.8151,30.3787-37.3191-12.9707-22.8693-34.4747-33.5645-33.2231-63.488Z" fill="#f1d978"/><rect width="102.4" height="102.4" rx="0" ry="0" transform="matrix(.092343 0 0 5.45385 419.550866 414.46668)" fill="#feddc2" stroke-width="0"/></g></svg>
+            <!-- <img src="https://picsum.photos/200/300" alt="Book Cover Back"> -->
+        </div>
+
+        <div class="content">
+            <p class="text" id="typedText"></p>
+        </div>
+        <div class='arrow' id="arrow"></div>
+        <div class="cake">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="113.2196" height="105.73154" viewBox="0,0,113.2196,105.73154"><g transform="translate(-183.3902,-127.09204)"><g data-paper-data="{&quot;isPaintingLayer&quot;:true}" fill-rule="nonzero" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" style="mix-blend-mode: normal"><path d="M243.69091,184.68713h-7.63923c-1.02093,0 -1.85596,-1.81119 -1.85596,-4.02559v-28.79992c0,-2.21439 0.83504,-4.02559 1.85596,-4.02559h7.63923c1.02093,0 1.85596,1.81119 1.85596,4.02559v28.79352c0,2.21439 -0.83504,4.03198 -1.85596,4.03198z" fill="#f7c194" stroke="#d8a982" stroke-width="0.5" stroke-linecap="butt"/><path d="M246.15291,134.95922c0.1984,2.69437 1.0048,6.04156 -0.1792,8.59515c-1.8432,3.97439 -7.12321,5.12638 -10.4128,2.20159c-2.73279,-2.43196 -2.95039,-7.04636 -0.7104,-9.90076c1.40799,-1.79199 3.03359,-2.7584 3.99999,-4.94079c0.4928,-1.1136 0.86399,-2.29119 1.09439,-3.48799c2.57282,0.92801 2.48323,14.94402 6.20802,7.53281z" fill="#f97439" stroke="#db6532" stroke-width="0.5" stroke-linecap="butt"/><path d="M244.85079,138.31265c0.11737,1.87691 0,2.90589 -0.64038,4.75187c-1.09039,2.76859 -5.02777,3.36802 -6.97381,1.33059c-1.61666,-1.69412 -1.74538,-4.90855 -0.42025,-6.89694c0.83294,-1.24831 1.7946,-1.92151 2.3663,-3.44178c0.29153,-0.77574 0.51112,-1.59606 0.64742,-2.42976c0.77101,0.39612 1.98376,10.9658 5.02072,6.08093z" fill="#fc883e" stroke="#efefef" stroke-width="0" stroke-linecap="butt"/><path d="M239.96503,135.8552c0.3136,0.6784 1.43905,3.86226 1.67455,4.39919c0.4215,1.31481 1.5975,-0.49853 1.6423,-0.53693c0,1.5018 0.37279,1.94064 -1.22081,4.13584c-0.62079,0.8576 -1.74501,1.10913 -2.69861,0.82753c-4.33279,-1.28644 -0.49823,-6.37444 0.60257,-8.82563z" fill="#f9ba67" stroke="#efefef" stroke-width="0" stroke-linecap="butt"/><path d="M239.53528,139.08722c-0.0704,1.68319 1.1392,2.2848 1.8688,3.57119c0.6848,1.2096 -0.192,2.47039 -1.7088,2.0992c-2.60479,-0.6464 -0.9472,-4.26238 -0.16,-5.67038z" fill="#f1d978" stroke="#efefef" stroke-width="0" stroke-linecap="butt"/><path d="M234.68704,181.96863v-31.4141h0.53189v31.4141z" fill="#feddc2" stroke="#000000" stroke-width="0" stroke-linecap="butt"/><path d="M183.6402,232.57357c0,0 0,-34.47512 0,-42.64976c0,-3.2986 2.51111,-6.94445 5.50098,-6.94445c10.90063,0 76.91193,0 99.54269,0c4.76437,0 7.60605,3.43277 7.60605,6.59021c0,8.06566 0,43.00401 0,43.00401z" fill="#a07f7d" stroke="#8c6f6d" stroke-width="0.5" stroke-linecap="butt"/><path d="M183.69802,220.59098v-11.67847h112.53408v11.67847z" fill="#f9eebd" stroke="#000000" stroke-width="0" stroke-linecap="butt"/><path d="M183.69802,199.45815v-7.75211h112.53408v7.75211z" fill="#f9eebd" stroke="#000000" stroke-width="0" stroke-linecap="butt"/><path d="M195.65045,194.83947c-3.93637,-3.38656 -4.59804,12.16971 -7.20166,12.34363c-3.11213,0.20789 -4.80859,-4.97697 -4.80859,-7.72809c0,-4.03039 0,-7.39776 0,-9.31637c0,-3.2986 2.51111,-6.94446 5.50098,-6.94446c10.90063,0 76.91193,0 99.54269,0c4.76437,0 7.60605,3.43277 7.60605,6.59021c0,1.58918 0.6441,13.19769 -1.97874,15.85896c-2.62284,2.66127 -2.50534,-13.04451 -4.84487,-11.06356c-2.33954,1.98095 -0.18093,14.06086 -5.86521,13.63186c-5.68427,-0.429 0.87478,-14.13735 -6.01444,-14.46388c-6.88922,-0.32653 0.03258,21.71338 -6.78814,20.90393c-9.18203,0.50239 -0.34646,-21.69628 -7.48447,-21.96205c-5.61765,-0.20916 -2.27268,20.34823 -11.59991,19.97234c-7.4298,-0.29942 1.00968,-16.77481 -8.12277,-19.90008c-9.13245,-3.12527 -4.16681,12.86969 -10.11757,13.65795c-4.96247,0.65735 -0.35283,-9.46245 -5.34842,-11.83208c-4.99559,-2.36962 -4.17875,15.61422 -8.00021,17.03975c-3.82146,1.42553 -3.284,-5.9519 -3.76148,-6.82862c-0.71208,-1.30745 -0.45484,-10.98594 -3.29204,-8.71202c-2.8372,2.27392 -2.62147,4.9554 -3.96082,11.05544c-1.0146,4.62098 -0.50373,17.8562 -6.73637,13.41074c-3.80329,-2.71272 -1.17258,-20.93756 -6.72401,-25.71359z" fill="#ffd79f" stroke="#b3976f" stroke-width="0.5" stroke-linecap="butt"/><path d="M186.14679,186.66546l-1.73913,3.33332l0.57971,11.15938l2.02898,4.7826" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M196.98146,194.38145l2.60869,4.96079l1.88405,14.59889" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M201.4742,214.70063l1.30434,4.34781" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M214.15532,193.57614l2.31883,3.91303l1.73913,11.88402" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M227.78393,192.52131l2.31884,1.44927l1.44927,3.04347l0.57971,6.9565l0.28986,1.15942" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M243.72591,191.50682l2.75361,1.88405l2.02898,3.1884l0.72464,3.91303l0.31754,8.84924l1.05973,2.2142" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M265.26339,191.59359l1.5409,1.76103l0.66039,6.1636l-0.22013,9.02527l0.88051,3.85225l0.66039,0.88051" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M279.13149,192.8043l1.98116,2.09122l1.32077,5.39315" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M282.21329,199.29809l-0.11006,5.94347l0.55032,1.65096" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/><path d="M290.35805,193.46468l1.43084,1.32077l1.87109,9.79572" fill="none" stroke="#efefef" stroke-width="1.5" stroke-linecap="round"/></g></g></svg>
+        </div>
+    </div>
+    <canvas id="fireworkCanvas"></canvas>
+    <audio id="audio" src="Ethereal.mp3"></audio>
+</body>
+
+<script>
+// typewriter.js
+
+function typeText(selector, text, speed = 40, callback) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+
+    element.textContent = ''; // Clear existing text
+    let i = 0;
+
+    function type() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else if (callback) {
+            callback();
+        }
+    }
+
+    type();
+}
+</script>
+
+<script>
+var i = 1;
+const params = new URLSearchParams(window.location.search);
+const name = params.get('name') || 'Bro';
+const m1 = params.get('m1') || 'Life is better with people like you in it.';
+const m2 = params.get('m2') || 'Wishing you a day that hits different.';
+const m3 = params.get('m3') || "Happy Birthday " + name + "!";
+function handleCardClick(card) {
+  if (i == 1){
+    // startFireworks(500);
+    audio = document.getElementById('audio');
+    audio.play();
+    card.classList.add("clicked");
+
+    const message = m1;
+    typeText("#typedText", message, 40);
+    i++;
+}
+  else if (i == 2) {
+    const message = m2;
+    // document.querySelector('.card').style = 'scale: 1.2; transform: rotateZ(-10deg) perspective(2000px);';
+    typeText("#typedText", message, 40);
+    i++;
+  }
+  else if (i == 3){
+    document.querySelector('.cake').style = 'animation: fadein 0.5s forwards';
+    // document.querySelector('.card').style = 'scale: 1.3; transform: rotateZ(0deg) perspective(2000px);';
+    document.getElementById('arrow').style = 'display: none;';
+    startFireworks(700);
+    const message = m3;
+    typeText("#typedText", message, 40);
+    i++;
+  }
+}
+</script>
+<script>
+const canvas = document.getElementById('fireworkCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+let interval;
+let animating = false;
+let backgroundOpacity = 0;
+let fadeInProgress = false;
+
+class Particle {
+  constructor(x, y, color, angle, speed, decay) {
+    this.x = x;
+    this.y = y;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.alpha = 1;
+    this.decay = decay;
+    this.color = color;
+    this.radius = Math.random() * 2 + 1;
+  }
+
+  update() {
+    this.vx *= 0.98;
+    this.vy *= 0.98;
+    this.vy += 0.05;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= this.decay;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 20;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  isDead() {
+    return this.alpha <= 0;
+  }
+}
+
+class Rocket {
+  constructor(x, targetY, color) {
+    this.x = x;
+    this.y = canvas.height;
+    this.targetY = targetY;
+    this.color = color;
+    this.vy = - (Math.random() * 3 + 7);
+    this.exploded = false;
+    this.particles = [];
+  }
+
+  update() {
+    if (!this.exploded) {
+      this.y += this.vy;
+      this.vy += 0.1;
+      if (this.y <= this.targetY || this.vy >= 0) {
+        this.explode();
+      }
+    } else {
+      this.particles.forEach(p => p.update());
+      this.particles = this.particles.filter(p => !p.isDead());
+    }
+  }
+
+  explode() {
+    this.exploded = true;
+    const count = 80 + Math.floor(Math.random() * 40);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 5 + 2;
+      const decay = Math.random() * 0.015 + 0.015;
+      this.particles.push(new Particle(this.x, this.y, this.color, angle, speed, decay));
+    }
+  }
+
+  draw(ctx) {
+    if (!this.exploded) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 15;
+      ctx.fill();
+      ctx.restore();
+    } else {
+      this.particles.forEach(p => p.draw(ctx));
+    }
+  }
+
+  isDone() {
+    return this.exploded && this.particles.length === 0;
+  }
+}
+
+function animate() {
+  if (!animating) return;
+  requestAnimationFrame(animate);
+
+  // slowly fade in black background
+  if (fadeInProgress && backgroundOpacity < 1) {
+    backgroundOpacity += 0.01;
+  }
+
+  ctx.fillStyle = `rgba(0, 0, 0, ${backgroundOpacity})`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  fireworks.forEach(fw => {
+    fw.update();
+    fw.draw(ctx);
+  });
+  fireworks = fireworks.filter(fw => !fw.isDone());
+}
+
+function launchRocket() {
+  const x = Math.random() * canvas.width;
+  const targetY = Math.random() * canvas.height * 0.5 + 100;
+  const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+  fireworks.push(new Rocket(x, targetY, color));
+}
+
+// 🔥 Start Fireworks with Custom Spawn Rate
+function startFireworks(spawnRate = 300) {
+  if (animating) return;
+  backgroundOpacity = 0;
+  fadeInProgress = true;
+  animating = true;
+  animate();
+  interval = setInterval(() => {
+    const count = 1 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < count; i++) launchRocket();
+  }, spawnRate);
+}
+
+function stopFireworks() {
+  animating = false;
+  fadeInProgress = false;
+  clearInterval(interval);
+  fireworks = [];
+  backgroundOpacity = 0;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.style.backgroundColor = "transparent";
+}
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</html>
