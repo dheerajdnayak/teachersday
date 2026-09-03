@@ -1,234 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachers' Day</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cabin Sketch', sans-serif;
-            color: black !important;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffffff;
-            overflow: hidden;
-            transition: all 1s ease-in-out;
-            cursor: grab;
-        }
-
-        #fireworkCanvas {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -10;
-        }
-
-        /* ── CARD ── */
-        .card {
-            position: relative;
-            width: 300px;
-            height: 400px;
-            background-color: #edeae1;
-            border-radius: 0 10px 10px 0;
-            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4),
-                inset 300px 0 50px rgba(0, 0, 0, 0.4);
-            transform: perspective(2000px) rotateZ(10deg);
-            transform-style: preserve-3d;
-            transition: all 1s ease-in-out;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .cover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0 10px 10px 0;
-            background: url('https://e0.pxfuel.com/wallpapers/704/231/desktop-wallpaper-premium-vector-of-abstract-blue-tone-memphis-patterned-mobile-phone-vector-by-aum-about-dark-instagram-story-background-aesthetic-background-abstract-design-cute-background-graphic-aesthetic-abstract.jpg') no-repeat center center / cover;
-            transform-origin: left;
-            transform-style: preserve-3d;
-            transition: all 1s ease-in-out;
-        }
-
-        .cover svg {
-            backface-visibility: hidden;
-            scale: 0.6;
-            transform: translate(-60px, 100px);
-        }
-
-        .clicked {
-            transform: perspective(2000px) rotateZ(0deg);
-            scale: 1.3;
-            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4),
-                inset 20px 0 50px rgba(0, 0, 0, 0.4);
-        }
-
-        .clicked .cover {
-            transform: rotateY(-135deg);
-            box-shadow: 10px 0 20px rgba(0, 0, 0, 0.4);
-        }
-
-        /* ── CONTENT ── */
-        .content {
-            width: 100%;
-            height: 100%;
-            padding: 1.8rem 2rem 3.2rem 2rem;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: flex-start;
-            font-size: 11px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ── TEXT ── */
-        .text {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            text-align: left;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            min-height: 2.4rem;
-            width: 100%;
-            z-index: 1;
-            mix-blend-mode: difference;
-            margin: 0;
-            padding: 0;
-            transform: none;
-            transition: none;
-        }
-
-        /* Initial prompt styling */
-        .text.prompt {
-            font-size: 1.1rem;
-            opacity: 0.85;
-            letter-spacing: 0.02em;
-            animation: pulsePrompt 2s ease-in-out infinite;
-        }
-
-        @keyframes pulsePrompt {
-            0%,
-            100% {
-                opacity: 0.7;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.02);
-            }
-        }
-
-        /* ── ARROW ── */
-        .arrow {
-            background: url(arrow.png);
-            background-size: cover;
-            width: 50px;
-            height: 35px;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            margin: 20px;
-            z-index: 2;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        .arrow.hidden {
-            opacity: 0;
-        }
-
-        /* ── CAKE ── */
-        .cake {
-            opacity: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            bottom: 50%;
-            transform: translateY(calc(50% + 90px)) scale(1.5);
-            z-index: 0;
-            pointer-events: none;
-        }
-        .cake svg {
-            width: 100%;
-        }
-
-        @keyframes fadein {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* ── OVERLAY ── */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* ── RESPONSIVE ── */
-        @media screen and (max-width: 600px) {
-            .card {
-                scale: 1;
-                border-radius: 10px;
-            }
-            .clicked {
-                scale: 1.1;
-            }
-            .content {
-                padding: 1rem 1.2rem 2.8rem 1.2rem;
-                font-size: 0.9rem;
-            }
-            .text {
-                font-size: 1.1rem;
-                min-height: 2rem;
-            }
-            .text.prompt {
-                font-size: 1rem;
-            }
-            .arrow {
-                width: 40px;
-                height: 30px;
-                margin: 14px;
-            }
-        }
-
-        /* ── TYPING LOCK OVERLAY ── */
-        .card.typing {
-            cursor: wait;
-        }
-        .card.typing .cover {
-            pointer-events: none;
-        }
-    </style>
-<style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
@@ -411,14 +187,11 @@
 
     </style>
 </head>
-
 <body>
-
     <div class="overlay"></div>
-
-    <div class="card" id="card" onclick="handleCardClick(this);">
+    <div class="card" onclick="handleCardClick(this);">
         <div class="cover">
-<svg xmlns="http://www.w3.org/2000/svg" width="388" height="255" viewBox="0 0 388 255" fill="none"><script xmlns="" id="eppiocemhmnlbhjplcgkofciiegomcon"/><script xmlns=""/><script xmlns=""/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="388" height="255" viewBox="0 0 388 255" fill="none"><script xmlns="" id="eppiocemhmnlbhjplcgkofciiegomcon"/><script xmlns=""/><script xmlns=""/>
 <g clip-path="url(#clip0_3354_19049)">
 <path d="M315.929 0.0288086H59.6602V150.569H315.929V0.0288086Z" fill="#1A424A"/>
 <path opacity="0.2" d="M315.929 0.0288086H59.6602V150.569H315.929V0.0288086Z" fill="black"/>
@@ -1410,236 +1183,289 @@
 <rect width="388" height="255" fill="white"/>
 </clipPath>
 </defs>
-</svg>            
+</svg>
+            <!-- <img src="https://picsum.photos/200/300" alt="Book Cover Back"> -->
         </div>
 
         <div class="content">
-            <p class="text prompt" id="typedText">✧ click the card to begin ✧</p>
+            <p class="text" id="typedText"></p>
         </div>
-        <div class="arrow" id="arrow"></div>
-        <div class="cake"></div>
+        <div class='arrow' id="arrow"></div>
+        <div class="cake">
+            
+        </div>
     </div>
-
     <canvas id="fireworkCanvas"></canvas>
     <audio id="audio" src="Ethereal.mp3"></audio>
-
-    <script>
-        // ===== Typewriter =====
-        let isTyping = false;
-        let typingTimeout = null;
-
-        function typeText(selector, text, speed = 40, callback) {
-            const element = document.querySelector(selector);
-            if (!element) return;
-
-            // Clear any pending typewriter
-            if (typingTimeout) {
-                clearTimeout(typingTimeout);
-                typingTimeout = null;
-            }
-
-            element.textContent = '';
-            isTyping = true;
-            document.getElementById('card').classList.add('typing');
-
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    typingTimeout = setTimeout(type, speed);
-                } else {
-                    isTyping = false;
-                    document.getElementById('card').classList.remove('typing');
-                    if (callback) callback();
-                }
-            }
-            type();
-        }
-
-        // ===== Fireworks =====
-        const canvas = document.getElementById('fireworkCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let fireworks = [];
-        let interval;
-        let animating = false;
-        let backgroundOpacity = 0;
-        let fadeInProgress = false;
-
-        class Particle {
-            constructor(x, y, color, angle, speed, decay) {
-                this.x = x;
-                this.y = y;
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
-                this.alpha = 1;
-                this.decay = decay;
-                this.color = color;
-                this.radius = Math.random() * 2 + 1;
-            }
-            update() {
-                this.vx *= 0.98;
-                this.vy *= 0.98;
-                this.vy += 0.05;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= this.decay;
-            }
-            draw(ctx) {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 20;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-            isDead() { return this.alpha <= 0; }
-        }
-
-        class Rocket {
-            constructor(x, targetY, color) {
-                this.x = x;
-                this.y = canvas.height;
-                this.targetY = targetY;
-                this.color = color;
-                this.vy = -(Math.random() * 3 + 7);
-                this.exploded = false;
-                this.particles = [];
-            }
-            update() {
-                if (!this.exploded) {
-                    this.y += this.vy;
-                    this.vy += 0.1;
-                    if (this.y <= this.targetY || this.vy >= 0) {
-                        this.explode();
-                    }
-                } else {
-                    this.particles.forEach(p => p.update());
-                    this.particles = this.particles.filter(p => !p.isDead());
-                }
-            }
-            explode() {
-                this.exploded = true;
-                const count = 80 + Math.floor(Math.random() * 40);
-                for (let i = 0; i < count; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 5 + 2;
-                    const decay = Math.random() * 0.015 + 0.015;
-                    this.particles.push(new Particle(this.x, this.y, this.color, angle, speed, decay));
-                }
-            }
-            draw(ctx) {
-                if (!this.exploded) {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 15;
-                    ctx.fill();
-                    ctx.restore();
-                } else {
-                    this.particles.forEach(p => p.draw(ctx));
-                }
-            }
-            isDone() { return this.exploded && this.particles.length === 0; }
-        }
-
-        function animate() {
-            if (!animating) return;
-            requestAnimationFrame(animate);
-            if (fadeInProgress && backgroundOpacity < 1) backgroundOpacity += 0.01;
-            ctx.fillStyle = `rgba(0, 0, 0, ${backgroundOpacity})`;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            fireworks.forEach(fw => { fw.update();
-                fw.draw(ctx); });
-            fireworks = fireworks.filter(fw => !fw.isDone());
-        }
-
-        function launchRocket() {
-            const x = Math.random() * canvas.width;
-            const targetY = Math.random() * canvas.height * 0.5 + 100;
-            const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            fireworks.push(new Rocket(x, targetY, color));
-        }
-
-        function startFireworks(spawnRate = 300) {
-            if (animating) return;
-            backgroundOpacity = 0;
-            fadeInProgress = true;
-            animating = true;
-            animate();
-            interval = setInterval(() => {
-                const count = 1 + Math.floor(Math.random() * 3);
-                for (let i = 0; i < count; i++) launchRocket();
-            }, spawnRate);
-        }
-
-        function stopFireworks() {
-            animating = false;
-            fadeInProgress = false;
-            clearInterval(interval);
-            fireworks = [];
-            backgroundOpacity = 0;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.style.backgroundColor = "transparent";
-        }
-
-        window.addEventListener("resize", () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // ===== Card click logic =====
-        // Get parameters from URL (optional)
-        const params = new URLSearchParams(window.location.search);
-        const name = params.get('name') || 'Dear';
-        const m1 = params.get('m1') || 'Life is better with teachers like you in it.';
-        const m2 = params.get('m2') || 'Wishing you a day that hits different.';
-        const m3 = params.get('m3') || "Happy Teachers' Day " + name + " Sir!";
-
-        let step = 1; // 1 = first message, 2 = second, 3 = third
-
-        function handleCardClick(card) {
-            if (isTyping) return; // prevent clicks while typing
-
-            const textEl = document.getElementById('typedText');
-            const arrow = document.getElementById('arrow');
-
-            if (step === 1) {
-                // First click: start first message
-                card.classList.add("clicked");
-                // Play audio
-                const audio = document.getElementById('audio');
-                audio.play().catch(() => {});
-                // Remove prompt class
-                textEl.classList.remove('prompt');
-                typeText("#typedText", m1, 40, () => {
-                    // after typing done, allow next click
-                });
-                step++;
-            } else if (step === 2) {
-                // Second click: second message
-                typeText("#typedText", m2, 40);
-                step++;
-            } else if (step === 3) {
-                // Third click: third message + fireworks + hide arrow
-                arrow.classList.add('hidden');
-                // Show cake (optional)
-                document.querySelector('.cake').style.animation = 'fadein 0.5s forwards';
-                startFireworks(700);
-                typeText("#typedText", m3, 40);
-                step++;
-            }
-            // After step 3, further clicks do nothing (or you could loop)
-        }
-    </script>
-
 </body>
+
+<script>
+// typewriter.js
+
+function typeText(selector, text, speed = 40, callback) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+
+    element.textContent = ''; // Clear existing text
+    let i = 0;
+
+    function type() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else if (callback) {
+            callback();
+        }
+    }
+
+    type();
+}
+</script>
+
+<script>
+var i = 1;
+const params = new URLSearchParams(window.location.search);
+const name = params.get('name') || 'Dear';
+const m1 = params.get('m1') || 'Life is better with teachers like you in it.';
+const m2 = params.get('m2') || 'Wishing you a day that hits different.';
+const m3 = params.get('m3') || "Happy Teachers' Day " + name + " Sir!";
+function handleCardClick(card) {
+  if (i == 1){
+    // startFireworks(500);
+    audio = document.getElementById('audio');
+    audio.play();
+    card.classList.add("clicked");
+
+    const message = m1;
+    typeText("#typedText", message, 40);
+    i++;
+}
+  else if (i == 2) {
+    const message = m2;
+    // document.querySelector('.card').style = 'scale: 1.2; transform: rotateZ(-10deg) perspective(2000px);';
+    typeText("#typedText", message, 40);
+    i++;
+  }
+  else if (i == 3){
+    document.querySelector('.cake').style = 'animation: fadein 0.5s forwards';
+    // document.querySelector('.card').style = 'scale: 1.3; transform: rotateZ(0deg) perspective(2000px);';
+    document.getElementById('arrow').style = 'display: none;';
+    startFireworks(700);
+    const message = m3;
+    typeText("#typedText", message, 40);
+    i++;
+  }
+}
+</script>
+<script>
+const canvas = document.getElementById('fireworkCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+let interval;
+let animating = false;
+let backgroundOpacity = 0;
+let fadeInProgress = false;
+
+class Particle {
+  constructor(x, y, color, angle, speed, decay) {
+    this.x = x;
+    this.y = y;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.alpha = 1;
+    this.decay = decay;
+    this.color = color;
+    this.radius = Math.random() * 2 + 1;
+  }
+
+  update() {
+    this.vx *= 0.98;
+    this.vy *= 0.98;
+    this.vy += 0.05;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= this.decay;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 20;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  isDead() {
+    return this.alpha <= 0;
+  }
+}
+
+class Rocket {
+  constructor(x, targetY, color) {
+    this.x = x;
+    this.y = canvas.height;
+    this.targetY = targetY;
+    this.color = color;
+    this.vy = - (Math.random() * 3 + 7);
+    this.exploded = false;
+    this.particles = [];
+  }
+
+  update() {
+    if (!this.exploded) {
+      this.y += this.vy;
+      this.vy += 0.1;
+      if (this.y <= this.targetY || this.vy >= 0) {
+        this.explode();
+      }
+    } else {
+      this.particles.forEach(p => p.update());
+      this.particles = this.particles.filter(p => !p.isDead());
+    }
+  }
+
+  explode() {
+    this.exploded = true;
+    const count = 80 + Math.floor(Math.random() * 40);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 5 + 2;
+      const decay = Math.random() * 0.015 + 0.015;
+      this.particles.push(new Particle(this.x, this.y, this.color, angle, speed, decay));
+    }
+  }
+
+  draw(ctx) {
+    if (!this.exploded) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 15;
+      ctx.fill();
+      ctx.restore();
+    } else {
+      this.particles.forEach(p => p.draw(ctx));
+    }
+  }
+
+  isDone() {
+    return this.exploded && this.particles.length === 0;
+  }
+}
+
+function animate() {
+  if (!animating) return;
+  requestAnimationFrame(animate);
+
+  // slowly fade in black background
+  if (fadeInProgress && backgroundOpacity < 1) {
+    backgroundOpacity += 0.01;
+  }
+
+  ctx.fillStyle = `rgba(0, 0, 0, ${backgroundOpacity})`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  fireworks.forEach(fw => {
+    fw.update();
+    fw.draw(ctx);
+  });
+  fireworks = fireworks.filter(fw => !fw.isDone());
+}
+
+function launchRocket() {
+  const x = Math.random() * canvas.width;
+  const targetY = Math.random() * canvas.height * 0.5 + 100;
+  const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+  fireworks.push(new Rocket(x, targetY, color));
+}
+
+// 🔥 Start Fireworks with Custom Spawn Rate
+function startFireworks(spawnRate = 300) {
+  if (animating) return;
+  backgroundOpacity = 0;
+  fadeInProgress = true;
+  animating = true;
+  animate();
+  interval = setInterval(() => {
+    const count = 1 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < count; i++) launchRocket();
+  }, spawnRate);
+}
+
+function stopFireworks() {
+  animating = false;
+  fadeInProgress = false;
+  clearInterval(interval);
+  fireworks = [];
+  backgroundOpacity = 0;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.style.backgroundColor = "transparent";
+}
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+<script>
+// ============================================================
+// Prevent clicking while typing animation is running
+// ============================================================
+
+let isTyping = false;
+
+// Override typeText to manage typing state
+const _origTypeText = window.typeText;
+
+typeText = function(selector, text, speed = 40, callback) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+
+    element.textContent = '';
+    let i = 0;
+    isTyping = true;
+
+    function type() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else {
+            isTyping = false;
+            if (callback) callback();
+        }
+    }
+
+    type();
+};
+
+// Override handleCardClick with typing check
+const _origHandleCardClick = window.handleCardClick;
+
+handleCardClick = function(card) {
+    // If typing is in progress, ignore click with visual feedback
+    if (isTyping) {
+        // Brief red glow to indicate click is disabled
+        card.style.boxShadow = '0 0 30px rgba(255, 50, 50, 0.6), 10px 0 20px rgba(0,0,0,0.4), inset 20px 0 50px rgba(0,0,0,0.4)';
+        card.style.transition = 'box-shadow 0.15s ease';
+        setTimeout(() => {
+            card.style.boxShadow = '';
+        }, 400);
+        return;
+    }
+
+    // Call original handler
+    _origHandleCardClick(card);
+};
+</script>
 </html>
